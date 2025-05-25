@@ -1,5 +1,6 @@
 package com.weatherapp.ui.weather_screen
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,8 +16,8 @@ class WeatherViewModel @Inject constructor(
     getCurrentWeatherUseCase: GetCurrentWeatherUseCase
 ) : ViewModel() {
 
-    val _state = mutableStateOf(WeatherState())
-    //val state: State<WeatherState> = _state
+    private val _state = mutableStateOf(WeatherState())
+    val state: State<WeatherState> get() = _state
 
     init {
         getCurrentWeatherUseCase().map {
