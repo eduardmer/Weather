@@ -1,10 +1,8 @@
 package com.weatherapp.ui.weather_screen
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.weatherapp.BuildConfig
 import com.weatherapp.common.Resource
 import com.weatherapp.domain.use_case.GetCurrentWeatherUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,6 +38,7 @@ class WeatherViewModel @Inject constructor(
                             item.toUiModel()
                         },
                         weatherForecast = it.data?.forecast.orEmpty(),
+                        error = it.message,
                         isLoading = false
                     )
                 }
@@ -48,6 +47,10 @@ class WeatherViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun dismissError() {
+        _state.value = _state.value.copy(error = null)
     }
 
 }

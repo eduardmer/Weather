@@ -1,6 +1,5 @@
 package com.weatherapp.domain.use_case
 
-import android.util.Log
 import com.weatherapp.common.Resource
 import com.weatherapp.domain.model.Weather
 import com.weatherapp.domain.repository.WeatherRepository
@@ -14,8 +13,6 @@ class GetCurrentWeatherUseCase @Inject constructor(
 
     operator fun invoke(): Flow<Resource<Weather>> =
         repository.getCurrentWeather().combine(repository.getForecastWeather()) { dailyWeather, forecastWeather ->
-            if (dailyWeather is Resource.Loading)
-                Log.i("pergjigja", "")
             when {
                 dailyWeather is Resource.Loading || forecastWeather is Resource.Loading -> Resource.Loading<Weather>()
                 dailyWeather is Resource.Error || forecastWeather is Resource.Error ->

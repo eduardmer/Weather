@@ -14,6 +14,7 @@ data class WeatherState(
     val city: CityDetails? = null,
     val weatherConditions: List<WeatherConditionsUi> = emptyList(),
     val weatherForecast: List<WeatherForecast> = emptyList(),
+    val error: String? = null,
     val isLoading: Boolean = false
 )
 
@@ -39,7 +40,7 @@ fun WeatherConditions.toUiModel() = WeatherConditionsUi(
         SUNRISE -> R.drawable.ic_sunrise
         WIND -> R.drawable.ic_wind
         HUMIDITY -> R.drawable.ic_humidity
-        RAINFALL -> R.drawable.ic_sunrise
+        RAINFALL -> R.drawable.ic_rain
         FEELS_LIKE -> R.drawable.ic_thermometer
         PRESSURE -> R.drawable.ic_pressure
     },

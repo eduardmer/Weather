@@ -7,4 +7,5 @@
     <string name="rainfall">RAINFALL</string>
     <string name="feels_like">FEELS LIKE</string>
     <string name="pressure">PRESSURE</string>
+    <string name="dismiss">Dismiss</string>
 </resources>

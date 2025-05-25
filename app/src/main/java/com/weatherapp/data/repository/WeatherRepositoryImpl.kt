@@ -6,7 +6,7 @@ import com.weatherapp.data.local.entity.toDomainModel
 import com.weatherapp.data.remote.WeatherApi
 import com.weatherapp.data.remote.dto.toDomainModel
 import com.weatherapp.data.remote.dto.toEntityModel
-import com.weatherapp.domain.model.WeatherDaily
+import com.weatherapp.domain.model.CurrentWeather
 import com.weatherapp.domain.model.WeatherForecast
 import com.weatherapp.domain.repository.WeatherRepository
 import kotlinx.coroutines.flow.Flow
@@ -20,24 +20,24 @@ class WeatherRepositoryImpl @Inject constructor(
     private val weatherDao: WeatherDao
 ) : WeatherRepository {
 
-    override fun getCurrentWeather(): Flow<Resource<WeatherDaily>> = flow {
+    override fun getCurrentWeather(): Flow<Resource<CurrentWeather>> = flow {
         try {
-            emit(Resource.Loading<WeatherDaily>())
+            emit(Resource.Loading<CurrentWeather>())
             val response = api.getCurrentWeather(41.234, 19.12)
             weatherDao.saveWeatherConditions(response.toEntityModel())
             emit(Resource.Success(response.toDomainModel()))
         } catch(e: IOException) {
-            emit(Resource.Error<WeatherDaily>(
+            emit(Resource.Error<CurrentWeather>(
                 "Couldn't reach server. Check your internet connection.",
-                WeatherDaily(
+                CurrentWeather(
                     null,
                     weatherDao.getWeatherConditions().map { it.toDomainModel() }
                 )
             ))
         } catch (e: Exception) {
-            emit(Resource.Error<WeatherDaily>(
+            emit(Resource.Error<CurrentWeather>(
                 e.localizedMessage ?: "An unexpected error occured",
-                WeatherDaily(
+                CurrentWeather(
                     null,
                     weatherDao.getWeatherConditions().map { it.toDomainModel() }
                 )

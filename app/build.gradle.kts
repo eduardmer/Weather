@@ -79,5 +79,6 @@ dependencies {
     implementation(libs.room.ktx)
 
     implementation(libs.coil)
+    implementation(libs.coil.network)
 
 }

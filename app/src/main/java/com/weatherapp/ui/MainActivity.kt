@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable(route = Screen.WeatherScreen.route) {
                             val viewModel: WeatherViewModel by viewModels()
-                            WeatherScreen(viewModel._state.value)
+                            WeatherScreen(viewModel._state.value, viewModel::dismissError)
                         }
                     }
                 }

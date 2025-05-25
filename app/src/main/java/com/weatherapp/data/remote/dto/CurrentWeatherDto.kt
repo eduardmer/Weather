@@ -4,7 +4,7 @@ import com.weatherapp.common.DateTimeUtils
 import com.weatherapp.common.toCelsius
 import com.weatherapp.data.local.entity.WeatherConditionsEntity
 import com.weatherapp.domain.model.CityDetails
-import com.weatherapp.domain.model.WeatherDaily
+import com.weatherapp.domain.model.CurrentWeather
 import com.weatherapp.domain.model.WeatherConditionsType
 import com.weatherapp.domain.model.WeatherConditions
 
@@ -17,7 +17,7 @@ data class CurrentWeatherDto(
     val wind: Wind
 )
 
-fun CurrentWeatherDto.toDomainModel() = WeatherDaily(
+fun CurrentWeatherDto.toDomainModel() = CurrentWeather(
     CityDetails(
         name,
         main.temp.toCelsius(),

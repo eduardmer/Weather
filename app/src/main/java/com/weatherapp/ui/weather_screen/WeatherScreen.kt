@@ -35,7 +35,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.weatherapp.R
 import com.weatherapp.domain.model.CityDetails
 import com.weatherapp.domain.model.WeatherForecast
 import com.weatherapp.ui.theme.Spacing
@@ -45,7 +44,8 @@ import com.weatherapp.ui.theme.White
 @Preview
 @Composable
 fun WeatherScreen(
-    state: WeatherState
+    state: WeatherState,
+    dismissError: () -> Unit
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -100,7 +100,7 @@ fun WeatherScreen(
                         .clip(MaterialTheme.shapes.medium)
                         .background(color = TransparentBlack)
                         .padding(Spacing.medium),
-                    horizontalArrangement = Arrangement.spacedBy(Spacing.medium)
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.large)
                 ) {
                     items(state.weatherForecast.size) {
                         WeatherForecastItem(
@@ -113,6 +113,10 @@ fun WeatherScreen(
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
     }
+    if (!state.error.isNullOrEmpty())
+        AlertDialog(state.error) {
+            dismissError()
+        }
 }
 
 @Composable
@@ -135,7 +139,7 @@ fun HeaderSection(
         if (details.description != null)
             Text(
                 details.description,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodyMedium
             )
         Text(
             "H:${details.tempMax}, L:${details.tempMin}",
@@ -206,7 +210,8 @@ fun WeatherForecastItem(
         )
         AsyncImage(
             contentScale = ContentScale.FillBounds,
-            model = "https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg",
+            modifier = Modifier.size(40.dp),
+            model = item.icon,
             contentDescription = null
         )
         Text(
