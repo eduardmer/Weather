@@ -15,6 +15,7 @@ room = "2.7.1"
 composeNavigation = "2.9.0"
 coil = "3.2.0"
 accompanist-permission = "0.37.3"
+play-services-location = "21.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -42,6 +43,7 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 coil = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 coil-network = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 accompanist-permission = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist-permission" }
+play-service-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

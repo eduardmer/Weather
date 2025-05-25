@@ -11,8 +11,8 @@ class GetCurrentWeatherUseCase @Inject constructor(
     private val repository: WeatherRepository
 ) {
 
-    operator fun invoke(): Flow<Resource<Weather>> =
-        repository.getCurrentWeather().combine(repository.getForecastWeather()) { dailyWeather, forecastWeather ->
+    operator fun invoke(latLng: Pair<Double, Double>): Flow<Resource<Weather>> =
+        repository.getCurrentWeather(latLng).combine(repository.getForecastWeather(latLng)) { dailyWeather, forecastWeather ->
             when {
                 dailyWeather is Resource.Loading || forecastWeather is Resource.Loading -> Resource.Loading<Weather>()
                 dailyWeather is Resource.Error || forecastWeather is Resource.Error ->
@@ -21,6 +21,7 @@ class GetCurrentWeatherUseCase @Inject constructor(
                             forecastWeather.message.orEmpty()
                         },
                         Weather(
+                            dailyWeather.data?.isDay != false,
                             dailyWeather.data?.cityDetails,
                             dailyWeather.data?.details.orEmpty(),
                             forecastWeather.data.orEmpty()
@@ -28,6 +29,7 @@ class GetCurrentWeatherUseCase @Inject constructor(
                     )
                 else -> Resource.Success(
                     Weather(
+                        dailyWeather.data?.isDay != false,
                         dailyWeather.data?.cityDetails,
                         dailyWeather.data?.details.orEmpty(),
                         forecastWeather.data.orEmpty()

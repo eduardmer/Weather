@@ -1,7 +1,9 @@
 package com.weatherapp.ui.weather_screen
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
 import androidx.compose.foundation.Image
@@ -32,6 +34,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,10 +44,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import coil3.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.android.gms.location.LocationServices
 import com.weatherapp.R
 import com.weatherapp.domain.model.CityDetails
 import com.weatherapp.domain.model.WeatherForecast
@@ -57,16 +62,32 @@ import com.weatherapp.ui.theme.White
 @Composable
 fun WeatherScreen(
     state: WeatherState,
-    dismissError: () -> Unit
+    onEvent: (EventType) -> Unit
 ) {
+    val context = LocalContext.current
     val locationPermissionState = rememberMultiplePermissionsState(
         listOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION
         )
     )
+    val locationClient = remember {
+        LocationServices.getFusedLocationProviderClient(context)
+    }
     LaunchedEffect(Unit) {
         locationPermissionState.launchMultiplePermissionRequest()
+    }
+    LaunchedEffect(locationPermissionState.allPermissionsGranted) {
+        if (
+            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        ) {
+            locationClient.lastLocation.addOnSuccessListener { location ->
+                location?.let {
+                    onEvent(EventType.GetWeatherEvent(Pair(location.latitude, location.longitude)))
+                }
+            }
+        }
     }
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -138,7 +159,8 @@ fun WeatherScreen(
             } else {
                 AllowLocationAccess(
                     modifier = Modifier.padding(Spacing.medium)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    context
                 )
             }
             if (state.isLoading == true)
@@ -147,7 +169,7 @@ fun WeatherScreen(
     }
     if (!state.error.isNullOrEmpty())
         AlertDialog(state.error) {
-            dismissError()
+            onEvent(EventType.DismissDialogEvent)
         }
 }
 
@@ -255,9 +277,9 @@ fun WeatherForecastItem(
 
 @Composable
 fun AllowLocationAccess(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    context: Context
 ) {
-    val context = LocalContext.current
     Column(
         modifier = modifier
     ) {

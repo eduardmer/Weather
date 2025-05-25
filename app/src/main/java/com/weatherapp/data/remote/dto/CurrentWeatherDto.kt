@@ -18,6 +18,7 @@ data class CurrentWeatherDto(
 )
 
 fun CurrentWeatherDto.toDomainModel() = CurrentWeather(
+    System.currentTimeMillis() >= sys.sunrise * 1000 && System.currentTimeMillis() < sys.sunset * 1000,
     CityDetails(
         name,
         main.temp.toCelsius(),

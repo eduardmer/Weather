@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface WeatherRepository {
 
-    fun getCurrentWeather(): Flow<Resource<CurrentWeather>>
+    fun getCurrentWeather(latLng: Pair<Double, Double>): Flow<Resource<CurrentWeather>>
 
-    fun getForecastWeather(): Flow<Resource<List<WeatherForecast>>>
+    fun getForecastWeather(latLng: Pair<Double, Double>): Flow<Resource<List<WeatherForecast>>>
 
 }
