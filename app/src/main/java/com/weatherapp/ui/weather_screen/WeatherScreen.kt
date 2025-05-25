@@ -55,10 +55,10 @@ import com.weatherapp.domain.model.CityDetails
 import com.weatherapp.domain.model.WeatherForecast
 import com.weatherapp.ui.theme.Spacing
 import com.weatherapp.ui.theme.TransparentBlack
+import com.weatherapp.ui.theme.WeatherAppTheme
 import com.weatherapp.ui.theme.White
 
 @OptIn(ExperimentalPermissionsApi::class)
-@Preview
 @Composable
 fun WeatherScreen(
     state: WeatherState,
@@ -306,5 +306,38 @@ fun AllowLocationAccess(
                 style = MaterialTheme.typography.bodyLarge
             )
         }
+    }
+}
+
+@Preview
+@Composable
+fun WeatherScreenPreview() {
+    WeatherAppTheme {
+        WeatherScreen(
+            WeatherState(
+                backgroundImage = R.drawable.bg_night,
+                city = CityDetails(
+                    "New York",
+                    "18.2°",
+                    "Raining",
+                    "22°",
+                    "13.7°"
+                ),
+                weatherConditions = listOf(
+                    WeatherConditionsUi(
+                        R.string.wind,
+                        R.drawable.ic_wind,
+                        "2342",
+                        ""
+                    ),
+                    WeatherConditionsUi(
+                        R.string.rainfall,
+                        R.drawable.ic_rain,
+                        "13ml",
+                        "Heavy rain"
+                    )
+                )
+            )
+        ) { }
     }
 }
