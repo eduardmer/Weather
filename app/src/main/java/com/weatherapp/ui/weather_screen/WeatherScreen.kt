@@ -141,20 +141,21 @@ fun WeatherScreen(
                         }
                     }
                     Spacer(modifier = Modifier.height(Spacing.medium))
-                    LazyRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(MaterialTheme.shapes.medium)
-                            .background(color = TransparentBlack)
-                            .padding(Spacing.medium),
-                        horizontalArrangement = Arrangement.spacedBy(Spacing.large)
-                    ) {
-                        items(state.weatherForecast.size) {
-                            WeatherForecastItem(
-                                item = state.weatherForecast[it]
-                            )
+                    if (state.weatherForecast.isNotEmpty())
+                        LazyRow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(MaterialTheme.shapes.medium)
+                                .background(color = TransparentBlack)
+                                .padding(Spacing.medium),
+                            horizontalArrangement = Arrangement.spacedBy(Spacing.large)
+                        ) {
+                            items(state.weatherForecast.size) {
+                                WeatherForecastItem(
+                                    item = state.weatherForecast[it]
+                                )
+                            }
                         }
-                    }
                 }
             } else {
                 AllowLocationAccess(

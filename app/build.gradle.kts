@@ -84,5 +84,7 @@ dependencies {
     implementation(libs.accompanist.permission)
 
     implementation(libs.play.service.location)
+    testImplementation(kotlin("test"))
+    testImplementation(libs.coroutines.test)
 
 }
