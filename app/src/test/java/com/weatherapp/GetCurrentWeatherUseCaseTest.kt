@@ -15,7 +15,7 @@ class GetCurrentWeatherUseCaseTest {
     private lateinit var api: FakeWeatherApi
     private lateinit var dao: FakeWeatherDao
     private lateinit var repository: WeatherRepositoryImpl
-    private lateinit var useCase: GetCurrentWeatherUseCase
+    private lateinit var getCurrentWeatherUseCase: GetCurrentWeatherUseCase
     private val latLng = Pair(12.0, 77.0)
 
     @Before
@@ -23,7 +23,7 @@ class GetCurrentWeatherUseCaseTest {
         api = FakeWeatherApi()
         dao = FakeWeatherDao()
         repository = WeatherRepositoryImpl(api, dao)
-        useCase = GetCurrentWeatherUseCase(repository)
+        getCurrentWeatherUseCase = GetCurrentWeatherUseCase(repository)
     }
 
     @Test
@@ -32,7 +32,7 @@ class GetCurrentWeatherUseCaseTest {
         api.forecastWeatherShouldThrow = false
 
         val emissions = mutableListOf<Resource<Weather>>()
-        useCase(latLng).collect {
+        getCurrentWeatherUseCase(latLng).collect {
             emissions.add(it)
         }
 
@@ -43,7 +43,7 @@ class GetCurrentWeatherUseCaseTest {
     @Test
     fun `returns loading when one flow emits loading`() = runTest {
         val emissions = mutableListOf<Resource<Weather>>()
-        useCase(latLng).collect {
+        getCurrentWeatherUseCase(latLng).collect {
             emissions.add(it)
         }
         assertTrue(emissions.first() is Resource.Loading)
@@ -53,7 +53,7 @@ class GetCurrentWeatherUseCaseTest {
     fun `returns error when one flow emits error`() = runTest {
         api.currentWeatherShouldThrow = true
         val emissions = mutableListOf<Resource<Weather>>()
-        useCase(latLng).collect {
+        getCurrentWeatherUseCase(latLng).collect {
             emissions.add(it)
         }
         assertTrue(emissions.last() is Resource.Error)
